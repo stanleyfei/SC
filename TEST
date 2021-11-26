@@ -1,55 +1,50 @@
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System.Threading;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NUnit.Framework;
-using OpenQA.Selenium;
-using TestProject.consts;
-using TestProject.common;
-using TestProject.TestCase;
-using System.Threading;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
 using OpenQA.Selenium.Firefox;
-using TestProject.Class;
 using System.Collections;
 using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium.Chrome;
 
 namespace Tests
 {
     public class Tests
     {
+       
+
         [SetUp]
         public void Setup()
         {
-            string _TestConfigFileDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string _TestConfigFullPath = Path.GetDirectoryName(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile) + _TestConfigFullName;
-            ConfigSettingsHelper.SetAppConfigFile(_TestConfigFullPath);
-
-            Consts.TARGET_BROWSER = "chrome";
-
-            Consts.CHROME_OPTIONS = new ChromeOptions();
-            TestSuiteSetupHelper.WebDriverSetupTest();
+          
         }
 
         [Test]
         public void Test1()
         {
-            Consts.DRIVER.Navigate().GoToUrl("http://carlist.my");
+            //Browse driver
+            IWebDriver webDriver = new ChromeDriver(@"C:\driver\Web");
+            //Go to carlist
+            webDriver.Navigate().GoToUrl("http://carlist.my");
             Thread.Sleep(3000);
-            Consts.DRIVER.FindElement(By.XPath("//div[@class='selectize-control']")).Click();
-            Consts.DRIVER.FindElement(By.XPath("//div[@class='selectize-control dropdown active']//div[@data-value='"Used"']")).Click();
-            Consts.DRIVER.FindElement(By.XPath("//button[text()='Search']")).Click();
+            webDriver.FindElement(By.XPath("//div[@class='selectize-dropdown-content']")).Click();
+            webDriver.FindElement(By.XPath("//div[@class='selectize-control dropdown active']//div[@data-value='Used']")).Click();
+            webDriver.FindElement(By.XPath("//button[text()='Search']")).Click();
 
-            Consts.DRIVER.FindElement(By.XPath("//div[@class='container  container--listing  cf']//article[@id='listing_8282668']/div[@class='grid  grid--full  cf']/div[@class='listing__content  grid__item  soft-half--sides  four-tenths  palm-one-whole relative']/h2[@class='listing__title  epsilon  flush']/a[@class='ellipsize  js-ellipsize-text']")).Click();
+            webDriver.FindElement(By.XPath("//article[1]/div/div/h2/a[@class='ellipsize  js-ellipsize-text']")).Click();
 
-            String price = Consts.DRIVER.FindElement(By.XPath("//div[@class='listing__item-price'] | //div[@class='title-action']/h3")).Text;
+            String price = webDriver.FindElement(By.XPath("//div[@class='listing__item-price'] | //div[@class='title-action']/h3")).Text;
             int number;
             bool isParsable = Int32.TryParse(price, out number);
             Assert.That(number > 1000.00, Is.EqualTo(true));
+           
         }
     }
 }
