@@ -34,12 +34,17 @@ namespace Tests
             //Go to carlist
             webDriver.Navigate().GoToUrl("http://carlist.my");
             Thread.Sleep(3000);
+            //Find the dropdown and click the list
             webDriver.FindElement(By.XPath("//div[@class='selectize-dropdown-content']")).Click();
+            //Select Used for the list
             webDriver.FindElement(By.XPath("//div[@class='selectize-control dropdown active']//div[@data-value='Used']")).Click();
+            //Click on Search button
             webDriver.FindElement(By.XPath("//button[text()='Search']")).Click();
-
+            
+            //Locate the first option and click on it
             webDriver.FindElement(By.XPath("//article[1]/div/div/h2/a[@class='ellipsize  js-ellipsize-text']")).Click();
-
+            
+            //In Details page check the price
             String price = webDriver.FindElement(By.XPath("//div[@class='listing__item-price'] | //div[@class='title-action']/h3")).Text;
             int number;
             bool isParsable = Int32.TryParse(price, out number);
